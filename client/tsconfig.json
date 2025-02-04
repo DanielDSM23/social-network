@@ -1,26 +1,4 @@
 {
-  // "compilerOptions": {
-  //   "strict": true,
-  //   "rootDirs": ["src"],
-  //   "outDir": "dist",
-  //   "lib": ["es2020"],
-  //   "target": "es2020",
-  //   "module": "esnext",
-  //   "moduleResolution": "node",
-  //   "esModuleInterop": true,
-  //   "types": ["node"],
-  //   "skipLibCheck": true,
-  // },
-  "compilerOptions": {
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true
-  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
