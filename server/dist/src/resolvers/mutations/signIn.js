@@ -2,8 +2,7 @@ import { comparePasswords, createJWT } from "../../modules/auth.js";
 export const signIn = async (_, { username, password }, { dataSources }) => {
     try {
         const user = await dataSources.db.user.findFirstOrThrow({ where: { username } });
-        console.log(user);
-        const isValidPassword = comparePasswords(password, user.password);
+        const isValidPassword = await comparePasswords(password, user.password);
         if (!isValidPassword) {
             throw new Error('Invalid password');
         }
@@ -15,7 +14,8 @@ export const signIn = async (_, { username, password }, { dataSources }) => {
             token,
         };
     }
-    catch {
+    catch (e) {
+        console.log("Sign-in error", e);
         return {
             code: 401,
             message: 'User not auth',
