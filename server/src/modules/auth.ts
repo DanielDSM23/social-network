@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import { User } from "@prisma/client";
+import * as bcrypt from "bcrypt";
  
 export const createJWT = (user) => {
   const token = jwt.sign(
@@ -9,7 +11,6 @@ export const createJWT = (user) => {
 };
 
 
-import { User } from "@prisma/client";
  
 export type AuthenticatedUser = Pick<User, 'id' | 'username'>
  
@@ -23,7 +24,6 @@ export const getUser = (token: string): AuthenticatedUser | null => {
 }
 
 
-import * as bcrypt from "bcrypt";
  
  export const comparePasswords = (password: string, hash: string): Promise<boolean> => {
   return bcrypt.compare(password, hash);

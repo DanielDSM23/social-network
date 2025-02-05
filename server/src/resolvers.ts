@@ -1,5 +1,6 @@
 import { hashPassword } from "./modules/auth.js";
 import { Resolvers } from "./types";
+import { signIn } from "./resolvers/mutations/signIn.js";
 
 export const resolvers: Resolvers = {
     Query:{
@@ -173,6 +174,7 @@ export const resolvers: Resolvers = {
           };
       }
     },
+    signIn,
     commentTweet: async(_,{userId,tweetId,content},context) => {
       try{
         const commentedTweet = await context.dataSources.db.comment.create({
