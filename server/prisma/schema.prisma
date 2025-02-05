@@ -13,4 +13,65 @@ model User{
   id String @id @unique @default(uuid())
   username String  @unique
   password String
+  email String  @unique
+  bio String
+  createdAt DateTime
+  tweets Tweet[]
+  followers Follower[] @relation("UserFollowers")
+  following Follower[] @relation("UserFollowing")
+  likes Like[]
+  Comment Comment[]
+  Retweet Retweet[]
 }
+
+model Tweet{
+  id String @id @unique @default(uuid())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  content String 
+  createdAt DateTime
+  likes Like[]
+  comments Comment[]
+  retweets Retweet[]
+}
+
+model Like{
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  tweet Tweet @relation(fields: [tweetId], references: [id])
+  tweetId String
+  createdAt DateTime
+  @@id([userId, tweetId])
+}
+
+
+model Comment{
+  id String @id @unique @default(uuid())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  tweet Tweet @relation(fields: [tweetId], references: [id])
+  tweetId String
+  content String
+  createdAt DateTime
+}
+
+
+model Retweet{
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  tweet Tweet @relation(fields: [tweetId], references: [id])
+  tweetId String
+  createdAt DateTime
+  @@id([userId,tweetId])
+}
+
+
+model Follower {
+  followerId String
+  followingId String
+  follower   User @relation("UserFollowers",fields: [followerId], references: [id])
+  following  User @relation("UserFollowing",fields: [followingId], references: [id])
+  createdAt  DateTime @default(now())
+  @@id([followerId, followingId])
+}
+
