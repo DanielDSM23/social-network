@@ -136,7 +136,46 @@ export const resolvers: Resolvers = {
             tweet: null
           };
         }
+    },
+
+
+    likeTweet: async(_,{userId,tweetId},context) => {
+      try{
+        const likedTweet = await context.dataSources.db.like.create({
+          data:{
+            userId:userId,
+            tweetId:tweetId
+          }
+        });
+
+        return{
+          response:{
+            code: 201,
+            message: `Tweet has been created`,
+            success: true,
+          },
+          like: {
+            userId:likedTweet.userId,
+            tweetId:likedTweet.tweetId,
+            createdAt:likedTweet.createdAt
+          }
+        };
+
+      }catch(e){
+        console.log("erreur au like d'un tweet",e.message);
+          return {
+            response:{
+              code: 400,
+              message: `Problem with the like of a tweet`,
+              success: false,
+            },
+            like:null
+          };
       }
+    }
+
+  
+
     
   }
 };
