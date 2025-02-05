@@ -2,6 +2,17 @@ import { hashPassword } from "./modules/auth.js";
 import { Resolvers } from "./types";
 
 export const resolvers: Resolvers = {
+    Query:{
+      getAllUser: async (_,__,{dataSources}) => {
+        try{
+          const users = await dataSources.db.user.findMany();
+          return users
+        } catch (e){
+          console.log("erreur à la récupérations des users",e);
+          throw new Error("Impossible de récupérer la liste des users");
+        }
+      }
+    },
   Mutation: {
     createUser: async (_, { username, email, password, bio }, context) => {
       try {

@@ -104,9 +104,10 @@ export type MutationRetweetArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllUser?: Maybe<Array<User>>;
   getTweet?: Maybe<Tweet>;
   getTweets?: Maybe<Array<Tweet>>;
-  getUser?: Maybe<User>;
+  getUserById?: Maybe<User>;
 };
 
 
@@ -115,7 +116,7 @@ export type QueryGetTweetArgs = {
 };
 
 
-export type QueryGetUserArgs = {
+export type QueryGetUserByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -150,7 +151,6 @@ export type User = {
   following?: Maybe<Array<Follower>>;
   id: Scalars['ID']['output'];
   likes?: Maybe<Array<Like>>;
-  password: Scalars['String']['output'];
   retweets?: Maybe<Array<Retweet>>;
   tweets?: Maybe<Array<Tweet>>;
   username: Scalars['String']['output'];
@@ -316,9 +316,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getAllUser?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
   getTweet?: Resolver<Maybe<ResolversTypes['Tweet']>, ParentType, ContextType, RequireFields<QueryGetTweetArgs, 'id'>>;
   getTweets?: Resolver<Maybe<Array<ResolversTypes['Tweet']>>, ParentType, ContextType>;
-  getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
+  getUserById?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserByIdArgs, 'id'>>;
 };
 
 export type RetweetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Retweet'] = ResolversParentTypes['Retweet']> = {
@@ -351,7 +352,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   following?: Resolver<Maybe<Array<ResolversTypes['Follower']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   likes?: Resolver<Maybe<Array<ResolversTypes['Like']>>, ParentType, ContextType>;
-  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   retweets?: Resolver<Maybe<Array<ResolversTypes['Retweet']>>, ParentType, ContextType>;
   tweets?: Resolver<Maybe<Array<ResolversTypes['Tweet']>>, ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

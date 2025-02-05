@@ -4,7 +4,6 @@ export const typeDefs = gql`
 type User {
     id: ID!
     username: String!
-    password: String!
     email: String!
     bio: String!
     createdAt: String
@@ -62,7 +61,8 @@ type Follower {
 }
 
 type Query {
-    getUser(id: ID!): User
+    getUserById(id: ID!): User
+    getAllUser:[User!]
     getTweet(id: ID!): Tweet
     getTweets: [Tweet!]
 }
