@@ -6,8 +6,8 @@ type User {
     username: String!
     password: String!
     email: String!
-    bio: String
-    createdAt: String!
+    bio: String!
+    createdAt: String
     tweets: [Tweet!]
     followers: [Follower!]
     following: [Follower!]
@@ -21,7 +21,7 @@ type Tweet {
     user: User!
     userId: ID!
     content: String!
-    createdAt: String!
+    createdAt: String
     likes: [Like!]
     comments: [Comment!]
     retweets: [Retweet!]
@@ -32,7 +32,7 @@ type Like {
     userId: ID!
     tweet: Tweet!
     tweetId: ID!
-    createdAt: String!
+    createdAt: String
 }
 
 type Comment {
@@ -42,7 +42,7 @@ type Comment {
     tweet: Tweet!
     tweetId: ID!
     content: String!
-    createdAt: String!
+    createdAt: String
 }
 
 type Retweet {
@@ -50,7 +50,7 @@ type Retweet {
     userId: ID!
     tweet: Tweet!
     tweetId: ID!
-    createdAt: String!
+    createdAt: String
 }
 
 type Follower {
@@ -58,21 +58,38 @@ type Follower {
     followerId: ID!
     following: User!
     followingId: ID!
-    createdAt: String!
+    createdAt: String
 }
 
-# type Query {
-#     getUser(id: ID!): User
-#     getTweet(id: ID!): Tweet
-#     getTweets: [Tweet!]
-# }
+type Query {
+    getUser(id: ID!): User
+    getTweet(id: ID!): Tweet
+    getTweets: [Tweet!]
+}
 
-# type Mutation {
-#     createUser(username: String!, email: String!, password: String!, bio: String): User!
-#     createTweet(userId: ID!, content: String!): Tweet!
-#     likeTweet(userId: ID!, tweetId: ID!): Like!
-#     commentTweet(userId: ID!, tweetId: ID!, content: String!): Comment!
-#     retweet(userId: ID!, tweetId: ID!): Retweet!
-#     followUser(followerId: ID!, followingId: ID!): Follower!
-# }
+type Mutation {
+    createUser(username: String!, email: String!, password: String!, bio: String!): CreateUserResponse
+    createTweet(userId: ID!, content: String!): Tweet!
+    likeTweet(userId: ID!, tweetId: ID!): Like!
+    commentTweet(userId: ID!, tweetId: ID!, content: String!): Comment!
+    retweet(userId: ID!, tweetId: ID!): Retweet!
+    followUser(followerId: ID!, followingId: ID!): Follower!
+}
+
+
+type CreateUserResponse{
+    code: Int!
+    success: Boolean!
+    message: String!
+    user: UserDetail
+}
+
+
+type UserDetail{
+    id: ID!
+    username: String!
+    email: String!
+    bio: String!
+}
+
 `;

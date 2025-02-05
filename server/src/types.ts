@@ -19,24 +19,46 @@ export type Scalars = {
 export type Comment = {
   __typename?: 'Comment';
   content: Scalars['String']['output'];
-  createdAt: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   tweet: Tweet;
+  tweetId: Scalars['ID']['output'];
   user: User;
+  userId: Scalars['ID']['output'];
+};
+
+export type CreateUserResponse = {
+  __typename?: 'CreateUserResponse';
+  code: Scalars['Int']['output'];
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+  user?: Maybe<UserDetail>;
+};
+
+export type Follower = {
+  __typename?: 'Follower';
+  createdAt?: Maybe<Scalars['String']['output']>;
+  follower: User;
+  followerId: Scalars['ID']['output'];
+  following: User;
+  followingId: Scalars['ID']['output'];
 };
 
 export type Like = {
   __typename?: 'Like';
-  createdAt: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['String']['output']>;
   tweet: Tweet;
+  tweetId: Scalars['ID']['output'];
   user: User;
+  userId: Scalars['ID']['output'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   commentTweet: Comment;
   createTweet: Tweet;
-  createUser: User;
+  createUser?: Maybe<CreateUserResponse>;
+  followUser: Follower;
   likeTweet: Like;
   retweet: Retweet;
 };
@@ -56,9 +78,16 @@ export type MutationCreateTweetArgs = {
 
 
 export type MutationCreateUserArgs = {
-  bio?: InputMaybe<Scalars['String']['input']>;
+  bio: Scalars['String']['input'];
   email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+
+export type MutationFollowUserArgs = {
+  followerId: Scalars['ID']['input'];
+  followingId: Scalars['ID']['input'];
 };
 
 
@@ -92,32 +121,46 @@ export type QueryGetUserArgs = {
 
 export type Retweet = {
   __typename?: 'Retweet';
-  createdAt: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['String']['output']>;
   tweet: Tweet;
+  tweetId: Scalars['ID']['output'];
   user: User;
+  userId: Scalars['ID']['output'];
 };
 
 export type Tweet = {
   __typename?: 'Tweet';
   comments?: Maybe<Array<Comment>>;
   content: Scalars['String']['output'];
-  createdAt: Scalars['String']['output'];
+  createdAt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   likes?: Maybe<Array<Like>>;
   retweets?: Maybe<Array<Retweet>>;
   user: User;
+  userId: Scalars['ID']['output'];
 };
 
 export type User = {
   __typename?: 'User';
-  bio?: Maybe<Scalars['String']['output']>;
-  createdAt: Scalars['String']['output'];
+  bio: Scalars['String']['output'];
+  comments?: Maybe<Array<Comment>>;
+  createdAt?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
-  followers?: Maybe<Array<User>>;
-  following?: Maybe<Array<User>>;
+  followers?: Maybe<Array<Follower>>;
+  following?: Maybe<Array<Follower>>;
   id: Scalars['ID']['output'];
+  likes?: Maybe<Array<Like>>;
   password: Scalars['String']['output'];
+  retweets?: Maybe<Array<Retweet>>;
   tweets?: Maybe<Array<Tweet>>;
+  username: Scalars['String']['output'];
+};
+
+export type UserDetail = {
+  __typename?: 'UserDetail';
+  bio: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
   username: Scalars['String']['output'];
 };
 
@@ -194,7 +237,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Comment: ResolverTypeWrapper<Comment>;
+  CreateUserResponse: ResolverTypeWrapper<CreateUserResponse>;
+  Follower: ResolverTypeWrapper<Follower>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Like: ResolverTypeWrapper<Like>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
@@ -202,13 +248,17 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Tweet: ResolverTypeWrapper<Tweet>;
   User: ResolverTypeWrapper<User>;
+  UserDetail: ResolverTypeWrapper<UserDetail>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Comment: Comment;
+  CreateUserResponse: CreateUserResponse;
+  Follower: Follower;
   ID: Scalars['ID']['output'];
+  Int: Scalars['Int']['output'];
   Like: Like;
   Mutation: {};
   Query: {};
@@ -216,28 +266,51 @@ export type ResolversParentTypes = {
   String: Scalars['String']['output'];
   Tweet: Tweet;
   User: User;
+  UserDetail: UserDetail;
 };
 
 export type CommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = {
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   tweet?: Resolver<ResolversTypes['Tweet'], ParentType, ContextType>;
+  tweetId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateUserResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateUserResponse'] = ResolversParentTypes['CreateUserResponse']> = {
+  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['UserDetail']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FollowerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Follower'] = ResolversParentTypes['Follower']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  follower?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  followerId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  following?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  followingId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type LikeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Like'] = ResolversParentTypes['Like']> = {
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tweet?: Resolver<ResolversTypes['Tweet'], ParentType, ContextType>;
+  tweetId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   commentTweet?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationCommentTweetArgs, 'content' | 'tweetId' | 'userId'>>;
   createTweet?: Resolver<ResolversTypes['Tweet'], ParentType, ContextType, RequireFields<MutationCreateTweetArgs, 'content' | 'userId'>>;
-  createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'email' | 'username'>>;
+  createUser?: Resolver<Maybe<ResolversTypes['CreateUserResponse']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'bio' | 'email' | 'password' | 'username'>>;
+  followUser?: Resolver<ResolversTypes['Follower'], ParentType, ContextType, RequireFields<MutationFollowUserArgs, 'followerId' | 'followingId'>>;
   likeTweet?: Resolver<ResolversTypes['Like'], ParentType, ContextType, RequireFields<MutationLikeTweetArgs, 'tweetId' | 'userId'>>;
   retweet?: Resolver<ResolversTypes['Retweet'], ParentType, ContextType, RequireFields<MutationRetweetArgs, 'tweetId' | 'userId'>>;
 };
@@ -249,43 +322,60 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type RetweetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Retweet'] = ResolversParentTypes['Retweet']> = {
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tweet?: Resolver<ResolversTypes['Tweet'], ParentType, ContextType>;
+  tweetId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type TweetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tweet'] = ResolversParentTypes['Tweet']> = {
   comments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>;
   content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   likes?: Resolver<Maybe<Array<ResolversTypes['Like']>>, ParentType, ContextType>;
   retweets?: Resolver<Maybe<Array<ResolversTypes['Retweet']>>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  bio?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  comments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  followers?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
-  following?: Resolver<Maybe<Array<ResolversTypes['User']>>, ParentType, ContextType>;
+  followers?: Resolver<Maybe<Array<ResolversTypes['Follower']>>, ParentType, ContextType>;
+  following?: Resolver<Maybe<Array<ResolversTypes['Follower']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  likes?: Resolver<Maybe<Array<ResolversTypes['Like']>>, ParentType, ContextType>;
   password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  retweets?: Resolver<Maybe<Array<ResolversTypes['Retweet']>>, ParentType, ContextType>;
   tweets?: Resolver<Maybe<Array<ResolversTypes['Tweet']>>, ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserDetailResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserDetail'] = ResolversParentTypes['UserDetail']> = {
+  bio?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
   Comment?: CommentResolvers<ContextType>;
+  CreateUserResponse?: CreateUserResponseResolvers<ContextType>;
+  Follower?: FollowerResolvers<ContextType>;
   Like?: LikeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Retweet?: RetweetResolvers<ContextType>;
   Tweet?: TweetResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserDetail?: UserDetailResolvers<ContextType>;
 };
 

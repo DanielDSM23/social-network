@@ -15,7 +15,7 @@ model User{
   password String
   email String  @unique
   bio String
-  createdAt DateTime
+  createdAt DateTime @default(now())
   tweets Tweet[]
   followers Follower[] @relation("UserFollowers")
   following Follower[] @relation("UserFollowing")
@@ -40,7 +40,7 @@ model Like{
   userId String
   tweet Tweet @relation(fields: [tweetId], references: [id])
   tweetId String
-  createdAt DateTime
+  createdAt DateTime @default(now())
   @@id([userId, tweetId])
 }
 
@@ -52,7 +52,7 @@ model Comment{
   tweet Tweet @relation(fields: [tweetId], references: [id])
   tweetId String
   content String
-  createdAt DateTime
+  createdAt DateTime @default(now())
 }
 
 
@@ -61,7 +61,7 @@ model Retweet{
   userId String
   tweet Tweet @relation(fields: [tweetId], references: [id])
   tweetId String
-  createdAt DateTime
+  createdAt DateTime @default(now())
   @@id([userId,tweetId])
 }
 
