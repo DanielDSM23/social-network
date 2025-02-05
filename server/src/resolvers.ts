@@ -52,14 +52,51 @@ export const resolvers: Resolvers = {
           }
         };
       } catch (error) {
-        // Retour en cas d'erreur
         return {
-          code: 400,
-          message: 'Something bad happened',
-          success: false,
+          response:{
+            code: 400,
+            message: 'Something bad happened',
+            success: false,
+          },          
           user: null
         };
       }
     },
+
+    createTweet: async (_,{userId,content},context) => {
+      try {
+        const createdTweet = await context.dataSources.db.tweet.create({
+          data:{
+            userId,
+            content
+          }
+        });
+
+        return{
+          response:{
+            code: 201,
+            message: `Tweet has been created`,
+            success: true,
+          },
+          tweet: {
+            id: createdTweet.id,
+            content: createdTweet.content,
+            user : createdTweet.user,
+            userId:createdTweet.userId
+          }
+        };
+        } catch(e){
+          console.log("erreur à la création du tweet",e);
+          return {
+            response:{
+              code: 400,
+              message: `Problem with the creation of the tweet`,
+              success: false,
+            },
+            tweet: null
+          };
+        }
+      }
+    
   }
 };
