@@ -3,6 +3,7 @@ import { Resolvers } from "./types";
 
 export const resolvers: Resolvers = {
     Query:{
+      
       getAllUser: async (_,__,{dataSources}) => {
         try{
           const users = await dataSources.db.user.findMany();
@@ -10,6 +11,18 @@ export const resolvers: Resolvers = {
         } catch (e){
           console.log("erreur à la récupérations des users",e);
           throw new Error("Impossible de récupérer la liste des users");
+        }
+      },
+
+      getUserById: async (_,{id},{dataSources}) => {
+        try{
+          const users = await dataSources.db.user.findUnique({
+            where:{id:id}
+          })
+          return users
+        } catch(e){
+          console.log("erreur à la récupérations du user",e);
+          throw new Error("Impossible de récupérer le user");
         }
       }
     },
