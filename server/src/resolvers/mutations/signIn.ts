@@ -1,4 +1,4 @@
-import { comparePasswords, createJWT } from "../../modules/auth.js"
+import { comparePasswords, createJWT, getUser } from "../../modules/auth.js"
 import { MutationResolvers } from "../../types"
 
 export const signIn: MutationResolvers['signIn'] = async (_, {username, password}, {dataSources}) => {
@@ -12,14 +12,14 @@ export const signIn: MutationResolvers['signIn'] = async (_, {username, password
       }
     
       const token = createJWT(user)
-      
       return {
         code: 200,
         message: 'User is signed in',
         success: true,
         token,
       }
-    } catch {
+    } catch(e) {
+      console.log("Sign-in error", e)
       return {
         code: 401,
         message: 'User not auth',

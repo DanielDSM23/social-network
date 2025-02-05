@@ -70,6 +70,7 @@ export const resolvers: Resolvers = {
   Mutation: {
     createUser: async (_, { username, email, password, bio }, context) => {
       try {
+        
         const createdUser = await context.dataSources.db.user.create({
           data: {
             username,
@@ -104,11 +105,14 @@ export const resolvers: Resolvers = {
       }
     },
 
-    createTweet: async (_,{userId,content},context) => {
+    createTweet: async (_,{content},context) => {
+      if(!context.user){
+        throw new Error("Unauthorized: You must be logged in to create a tweet.");
+      }
       try {
         const createdTweet = await context.dataSources.db.tweet.create({
           data:{
-            userId,
+            userId: context.user.id,
             content
           }
         });
@@ -140,11 +144,14 @@ export const resolvers: Resolvers = {
     },
 
 
-    likeTweet: async(_,{userId,tweetId},context) => {
+    likeTweet: async(_,{tweetId},context) => {
       try{
+        if(!context.user){
+          throw new Error("Unauthorized: You must be logged in to like a tweet.");
+        }
         const likedTweet = await context.dataSources.db.like.create({
           data:{
-            userId:userId,
+            userId:context.user.id,
             tweetId:tweetId
           }
         });
@@ -175,11 +182,14 @@ export const resolvers: Resolvers = {
       }
     },
     signIn,
-    commentTweet: async(_,{userId,tweetId,content},context) => {
+    commentTweet: async(_,{tweetId,content},context) => {
       try{
+        if(!context.user){
+          throw new Error("Unauthorized: You must be logged in to like a tweet.");
+        }
         const commentedTweet = await context.dataSources.db.comment.create({
           data:{
-            userId:userId,
+            userId:context.user.id,
             tweetId:tweetId,
             content
           }
