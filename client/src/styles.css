@@ -1,0 +1,95 @@
+/* styles.css */
+
+/* Styles globaux */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9fafb; /* Gris clair */
+    color: #333;
+  }
+  
+  /* Conteneur principal */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+  
+  /* Style des boutons */
+  .btn {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s;
+  }
+  
+  .btn-primary {
+    background-color: #2563eb; /* Bleu */
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.05);
+  }
+  
+  .btn-danger {
+    background-color: #dc2626; /* Rouge */
+    color: white;
+  }
+  
+  .btn-danger:hover {
+    background-color: #b91c1c;
+    transform: scale(1.05);
+  }
+  
+  /* Style des cartes (articles) */
+  .card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 16px;
+    transition: transform 0.2s;
+  }
+  
+  .card:hover {
+    transform: translateY(-3px);
+  }
+  
+  /* Style des inputs */
+  .input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border 0.3s;
+  }
+  
+  .input:focus {
+    border-color: #2563eb;
+    outline: none;
+  }
+  
+  /* Barre de navigation */
+  .navbar {
+    background-color: #1f2937; /* Gris foncé */
+    color: white;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar a {
+    color: white;
+    margin-right: 16px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .navbar a:hover {
+    text-decoration: underline;
+  }
+  
