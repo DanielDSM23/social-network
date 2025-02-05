@@ -24,8 +24,48 @@ export const resolvers: Resolvers = {
           console.log("erreur à la récupérations du user",e);
           throw new Error("Impossible de récupérer le user");
         }
-      }
+      },
+
+      getAllTweets: async (_,__,{dataSources}) => {
+        try{
+          const tweets = await dataSources.db.tweet.findMany();
+          return tweets;
+        } catch(e){
+          console.log("erreur à la récupérations des tweets",e);
+          throw new Error("Impossible de récupérer les tweets");
+        }
+      },
+
+      getTweetByUserId: async (_,{id},{dataSources}) => {
+        try{
+          const tweets = await dataSources.db.tweet.findMany({
+            where:{userId:id}
+          })
+          if (tweets.length === 0) {
+            throw new Error(`Aucun tweet trouvé pour l'utilisateur avec l'ID ${id}`);
+          }
+          return tweets;
+        } catch(e){
+          console.log("erreur à la récupérations du tweet par le ID user",e.message);
+          throw new Error("Impossible de récupérer le tweet par le ID User");
+        }
+      },
+
+      getTweetByTweetId: async (_,{id},{dataSources}) => {
+        try{
+          const tweet = await dataSources.db.tweet.findUnique({
+            where:{id:id}
+          })
+          return tweet;
+        } catch(e){
+          console.log("erreur à la récupérations du tweet par le ID tweet",e.message);
+          throw new Error("Impossible de récupérer le tweet par le ID tweet");
+        }
+      },
     },
+
+   
+
   Mutation: {
     createUser: async (_, { username, email, password, bio }, context) => {
       try {
