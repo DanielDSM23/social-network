@@ -25,6 +25,12 @@ export type Comment = {
   userId: Scalars['ID']['output'];
 };
 
+export type CreateCommentResponse = {
+  __typename?: 'CreateCommentResponse';
+  comment?: Maybe<Tweet>;
+  response?: Maybe<Response>;
+};
+
 export type CreateLikeResponse = {
   __typename?: 'CreateLikeResponse';
   like?: Maybe<Like>;
@@ -52,7 +58,7 @@ export type Like = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  commentTweet: Comment;
+  commentTweet?: Maybe<CreateCommentResponse>;
   createTweet?: Maybe<CreateTweetResponse>;
   createUser?: Maybe<CreateUserResponse>;
   likeTweet?: Maybe<CreateLikeResponse>;
@@ -209,6 +215,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Comment: ResolverTypeWrapper<Comment>;
+  CreateCommentResponse: ResolverTypeWrapper<CreateCommentResponse>;
   CreateLikeResponse: ResolverTypeWrapper<CreateLikeResponse>;
   CreateTweetResponse: ResolverTypeWrapper<CreateTweetResponse>;
   CreateUserResponse: ResolverTypeWrapper<CreateUserResponse>;
@@ -227,6 +234,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Comment: Comment;
+  CreateCommentResponse: CreateCommentResponse;
   CreateLikeResponse: CreateLikeResponse;
   CreateTweetResponse: CreateTweetResponse;
   CreateUserResponse: CreateUserResponse;
@@ -247,6 +255,12 @@ export type CommentResolvers<ContextType = any, ParentType extends ResolversPare
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   tweetId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type CreateCommentResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateCommentResponse'] = ResolversParentTypes['CreateCommentResponse']> = {
+  comment?: Resolver<Maybe<ResolversTypes['Tweet']>, ParentType, ContextType>;
+  response?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -276,7 +290,7 @@ export type LikeResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  commentTweet?: Resolver<ResolversTypes['Comment'], ParentType, ContextType, RequireFields<MutationCommentTweetArgs, 'content' | 'tweetId' | 'userId'>>;
+  commentTweet?: Resolver<Maybe<ResolversTypes['CreateCommentResponse']>, ParentType, ContextType, RequireFields<MutationCommentTweetArgs, 'content' | 'tweetId' | 'userId'>>;
   createTweet?: Resolver<Maybe<ResolversTypes['CreateTweetResponse']>, ParentType, ContextType, RequireFields<MutationCreateTweetArgs, 'content' | 'userId'>>;
   createUser?: Resolver<Maybe<ResolversTypes['CreateUserResponse']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'bio' | 'email' | 'password' | 'username'>>;
   likeTweet?: Resolver<Maybe<ResolversTypes['CreateLikeResponse']>, ParentType, ContextType, RequireFields<MutationLikeTweetArgs, 'tweetId' | 'userId'>>;
@@ -319,6 +333,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type Resolvers<ContextType = any> = {
   Comment?: CommentResolvers<ContextType>;
+  CreateCommentResponse?: CreateCommentResponseResolvers<ContextType>;
   CreateLikeResponse?: CreateLikeResponseResolvers<ContextType>;
   CreateTweetResponse?: CreateTweetResponseResolvers<ContextType>;
   CreateUserResponse?: CreateUserResponseResolvers<ContextType>;

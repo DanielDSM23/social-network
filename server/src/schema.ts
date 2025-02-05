@@ -46,7 +46,7 @@ type Mutation {
     createUser(username: String!, email: String!, password: String!, bio: String!): CreateUserResponse
     createTweet(userId: ID!, content: String!): CreateTweetResponse 
     likeTweet(userId: ID!, tweetId: ID!): CreateLikeResponse
-    commentTweet(userId: ID!, tweetId: ID!, content: String!): Comment!
+    commentTweet(userId: ID!, tweetId: ID!, content: String!): CreateCommentResponse
 }
 
 type Response{
@@ -68,5 +68,10 @@ type CreateTweetResponse{
 type CreateLikeResponse{
     response:Response
     like:Like
+}
+
+type CreateCommentResponse{
+    response: Response
+    comment: Tweet
 }
 `;

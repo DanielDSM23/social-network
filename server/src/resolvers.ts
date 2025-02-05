@@ -172,6 +172,42 @@ export const resolvers: Resolvers = {
             like:null
           };
       }
+    },
+    commentTweet: async(_,{userId,tweetId,content},context) => {
+      try{
+        const commentedTweet = await context.dataSources.db.comment.create({
+          data:{
+            userId:userId,
+            tweetId:tweetId,
+            content
+          }
+        });
+
+        return{
+          response:{
+            code: 201,
+            message: `Comment has been created`,
+            success: true,
+          },
+          like: {
+            userId:commentedTweet.userId,
+            tweetId:commentedTweet.tweetId,
+            content:commentedTweet.content,
+            createdAt:commentedTweet.createdAt
+          }
+        };
+
+      }catch(e){
+        console.log("erreur au commentaire d'un tweet",e.message);
+          return {
+            response:{
+              code: 400,
+              message: `Problem with the comment of a tweet`,
+              success: false,
+            },
+            like:null
+          };
+      }
     }
 
   
