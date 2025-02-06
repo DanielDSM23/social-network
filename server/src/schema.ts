@@ -73,7 +73,7 @@ type CreateLikeResponse{
 
 type CreateCommentResponse{
     response: Response
-    comment: Tweet
+    comment: Comment
 }
 
 type SignInUserResponse {

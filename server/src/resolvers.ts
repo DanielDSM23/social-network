@@ -1,6 +1,7 @@
 import { hashPassword } from "./modules/auth.js";
 import { Resolvers } from "./types";
 import { signIn } from "./resolvers/mutations/signIn.js";
+import { log } from "console";
 
 export const resolvers: Resolvers = {
     Query:{
@@ -86,6 +87,7 @@ export const resolvers: Resolvers = {
     Tweet:{
       likes:async(parent,__,{dataSources}) => {
         try{
+          console.log(parent);
           const likes = await dataSources.db.like.findMany({
           where:{
             tweetId: parent.id
@@ -100,12 +102,12 @@ export const resolvers: Resolvers = {
 
       comments:async(parent,__,{dataSources}) => {
         try{
-          const likes = await dataSources.db.like.findMany({
+          const comment = await dataSources.db.comment.findMany({
           where:{
             tweetId: parent.id
           }
           });
-          return likes
+          return comment
         }catch(e){
           console.log("Erreur lors de la récupération des commentaires du tweet", e.message);
           throw new Error("Impossible de récupérer les commentaire du tweet ");
@@ -249,7 +251,8 @@ export const resolvers: Resolvers = {
             message: `Comment has been created`,
             success: true,
           },
-          like: {
+          comment: {
+            id :commentedTweet.id,
             userId:commentedTweet.userId,
             tweetId:commentedTweet.tweetId,
             content:commentedTweet.content,
@@ -265,7 +268,7 @@ export const resolvers: Resolvers = {
               message: `Problem with the comment of a tweet`,
               success: false,
             },
-            like:null
+            comment:null
           };
       }
     }

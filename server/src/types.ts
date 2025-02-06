@@ -27,7 +27,7 @@ export type Comment = {
 
 export type CreateCommentResponse = {
   __typename?: 'CreateCommentResponse';
-  comment?: Maybe<Tweet>;
+  comment?: Maybe<Comment>;
   response?: Maybe<Response>;
 };
 
@@ -273,7 +273,7 @@ export type CommentResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type CreateCommentResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreateCommentResponse'] = ResolversParentTypes['CreateCommentResponse']> = {
-  comment?: Resolver<Maybe<ResolversTypes['Tweet']>, ParentType, ContextType>;
+  comment?: Resolver<Maybe<ResolversTypes['Comment']>, ParentType, ContextType>;
   response?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
