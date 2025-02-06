@@ -80,6 +80,7 @@ type SignInUserResponse {
     success: Boolean!
     message: String!
     token: String
+    userId: ID
 }
 
 

@@ -1,54 +1,77 @@
 import React, { useState } from 'react';
+import { gql, useMutation } from '@apollo/client';
+
+const REGISTER_MUTATION = gql`
+  mutation Register($username: String!, $email: String!, $password: String!, $bio: String!) {
+    createUser(username: $username, email: $email, password: $password, bio: $bio) {
+      response {
+        code
+        success
+        message
+      }
+      user {
+        id
+        username
+        email
+        bio
+        createdAt
+      }
+    }
+  }
+`;
 
 const Register: React.FC = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({ username: '', email: '', password: '', bio: '' });
+  const [register, { data, loading, error }] = useMutation(REGISTER_MUTATION);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.includes('@')) {
-      alert('Veuillez entrer un email valide.');
-      return;
+    try {
+      const result = await register({
+        variables: formData,
+      });
+      console.log('Utilisateur créé :', result.data.createUser.user);
+    } catch (err) {
+      console.error('Erreur lors de l’inscription :', err);
     }
-    if (password.length < 6) {
-      alert('Le mot de passe doit contenir au moins 6 caractères.');
-      return;
-    }
-    alert(`Nom : ${name}, Email : ${email}, Password : ${password}`);
   };
 
   return (
-    <div className="p-4">
+    <div className="container">
       <h1 className="text-2xl font-bold mb-4">Inscription</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Nom"
-          className="input"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          placeholder="Nom d'utilisateur"
+          value={formData.username}
+          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
           required
         />
         <input
           type="email"
           placeholder="Email"
-          className="input"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           required
         />
         <input
           type="password"
           placeholder="Mot de passe"
-          className="input"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={formData.password}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           required
         />
-        <button type="submit" className="btn btn-primary">
-          S'inscrire
+        <textarea
+          placeholder="Bio"
+          value={formData.bio}
+          onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+          required
+        />
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'Inscription en cours...' : 'S’inscrire'}
         </button>
+        {error && <p className="text-red-500">Erreur : {error.message}</p>}
+        {data && data.createUser.response.success && <p>Inscription réussie !</p>}
       </form>
     </div>
   );

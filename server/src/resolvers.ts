@@ -16,15 +16,24 @@ export const resolvers: Resolvers = {
         }
       },
 
-      getUserById: async (_,{id},{dataSources}) => {
-        try{
-          const users = await dataSources.db.user.findUnique({
-            where:{id:id}
-          })
-          return users
-        } catch(e){
-          console.log("erreur à la récupérations du user",e);
-          throw new Error("Impossible de récupérer le user");
+      getUserById: async (_, __, { user, dataSources }) => {
+        try {
+          if (!user || !user.id) {
+            throw new Error("Non authentifié. Token invalide ou manquant.");
+          }
+      
+          const userData = await dataSources.db.user.findUnique({
+            where: { id: user.id }, 
+          });
+      
+          if (!userData) {
+            throw new Error("Utilisateur non trouvé.");
+          }
+      
+          return userData;
+        } catch (e) {
+          console.log("Erreur lors de la récupération de l'utilisateur :", e);
+          throw new Error("Impossible de récupérer les informations de l'utilisateur.");
         }
       },
 

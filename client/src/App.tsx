@@ -1,5 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/client';
+import client from './apollo/client'; // Assurez-vous que ce chemin est correct
+
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -11,20 +14,22 @@ import Footer from './components/Footer';
 
 const App: React.FC = () => {
   return (
-    <Router>
-      <Header />
-      <div className="p-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/article/:id" element={<Article />} />
-          <Route path="/post-article" element={<PostArticle />} />
-        </Routes>
-      </div>
-      <Footer/>
-    </Router>
+    <ApolloProvider client={client}>
+      <Router>
+        <Header />
+        <div className="p-4">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/article/:id" element={<Article />} />
+            <Route path="/post-article" element={<PostArticle />} />
+          </Routes>
+        </div>
+        <Footer />
+      </Router>
+    </ApolloProvider>
   );
 };
 
