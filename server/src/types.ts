@@ -61,6 +61,7 @@ export type Mutation = {
   commentTweet?: Maybe<CreateCommentResponse>;
   createTweet?: Maybe<CreateTweetResponse>;
   createUser?: Maybe<CreateUserResponse>;
+  deleteTweet?: Maybe<Response>;
   likeTweet?: Maybe<CreateLikeResponse>;
   signIn?: Maybe<SignInUserResponse>;
 };
@@ -82,6 +83,11 @@ export type MutationCreateUserArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteTweetArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -307,6 +313,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   commentTweet?: Resolver<Maybe<ResolversTypes['CreateCommentResponse']>, ParentType, ContextType, RequireFields<MutationCommentTweetArgs, 'content' | 'tweetId'>>;
   createTweet?: Resolver<Maybe<ResolversTypes['CreateTweetResponse']>, ParentType, ContextType, RequireFields<MutationCreateTweetArgs, 'content'>>;
   createUser?: Resolver<Maybe<ResolversTypes['CreateUserResponse']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'bio' | 'email' | 'password' | 'username'>>;
+  deleteTweet?: Resolver<Maybe<ResolversTypes['Response']>, ParentType, ContextType, RequireFields<MutationDeleteTweetArgs, 'id'>>;
   likeTweet?: Resolver<Maybe<ResolversTypes['CreateLikeResponse']>, ParentType, ContextType, RequireFields<MutationLikeTweetArgs, 'tweetId'>>;
   signIn?: Resolver<Maybe<ResolversTypes['SignInUserResponse']>, ParentType, ContextType, RequireFields<MutationSignInArgs, 'password' | 'username'>>;
 };

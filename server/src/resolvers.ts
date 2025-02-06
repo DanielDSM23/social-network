@@ -193,6 +193,37 @@ export const resolvers: Resolvers = {
         }
     },
 
+    deleteTweet: async (_,{id},context) => {
+      if(!context.user){
+        throw new Error("Unauthorized: You must be logged in to create a tweet.");
+      }
+      try {
+        const tweet = await context.dataSources.db.tweet.findUnique({
+          where: { id, userId: context.user.id}
+        });
+  
+        if (!tweet) {
+          throw new Error(`Le tweet avec l'ID ${id} n'existe pas.`);
+        }
+        await context.dataSources.db.tweet.delete({
+          where: { id , userId: context.user.id}
+        });
+  
+        return {
+          code : 200,
+          success: true,
+          message: "Tweet supprimé avec succès",
+        };
+      } 
+      catch (e) {
+        console.log("Erreur lors de la suppression du tweet", e.message);
+        return {
+          code : 500,
+          success: false,
+          message: "Problem with delete tweet",
+        };
+      }
+    },
 
     likeTweet: async(_,{tweetId},context) => {
       try{
