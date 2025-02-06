@@ -36,10 +36,10 @@ type Comment {
 
 type Query {
     getUserById(id: ID!): User
-    getAllUser:[User!]
+    getAllUser:[User!]!
     getTweetByTweetId(id: ID!): Tweet
-    getTweetByUserId(id: ID!): [Tweet]
-    getAllTweets: [Tweet!]
+    getTweetByUserId(id: ID!): [Tweet!]!
+    getAllTweets: [Tweet!]!
 }
 
 type Mutation {

@@ -5,11 +5,13 @@ import { resolvers } from "./resolvers.js";
 import { getUser } from "./modules/auth.js";
 import db from "./datasources/db.js";
 
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
   });
    
+
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
     context:async ({req}) => {

@@ -48,7 +48,7 @@ export const resolvers: Resolvers = {
           }
           return tweets;
         } catch(e){
-          console.log("erreur à la récupérations du tweet par le ID user",e.message);
+          console.log("erreur à la récupérations du tweet par le ID user",e);
           throw new Error("Impossible de récupérer le tweet par le ID User");
         }
       },
@@ -60,7 +60,7 @@ export const resolvers: Resolvers = {
           })
           return tweet;
         } catch(e){
-          console.log("erreur à la récupérations du tweet par le ID tweet",e.message);
+          //console.log("erreur à la récupérations du tweet par le ID tweet",e);
           throw new Error("Impossible de récupérer le tweet par le ID tweet");
         }
       },
@@ -78,7 +78,7 @@ export const resolvers: Resolvers = {
           }
           return tweets;
         } catch (e) {
-          console.log("Erreur lors de la récupération des tweets de l'utilisateur", e.message);
+          console.log("Erreur lors de la récupération des tweets de l'utilisateur", e);
           throw new Error("Impossible de récupérer les tweets de l'utilisateur");
         }
       }
@@ -95,7 +95,7 @@ export const resolvers: Resolvers = {
           });
           return likes
         }catch(e){
-          console.log("Erreur lors de la récupération des likes du tweet", e.message);
+          console.log("Erreur lors de la récupération des likes du tweet", e);
           throw new Error("Impossible de récupérer les likes du tweet ");
         }
       },
@@ -109,7 +109,7 @@ export const resolvers: Resolvers = {
           });
           return comment
         }catch(e){
-          console.log("Erreur lors de la récupération des commentaires du tweet", e.message);
+          console.log("Erreur lors de la récupération des commentaires du tweet", e);
           throw new Error("Impossible de récupérer les commentaire du tweet ");
         }
       },
@@ -176,7 +176,6 @@ export const resolvers: Resolvers = {
           tweet: {
             id: createdTweet.id,
             content: createdTweet.content,
-            user : createdTweet.user,
             userId:createdTweet.userId
           }
         };
@@ -216,7 +215,7 @@ export const resolvers: Resolvers = {
         };
       } 
       catch (e) {
-        console.log("Erreur lors de la suppression du tweet", e.message);
+        console.log("Erreur lors de la suppression du tweet", e);
         return {
           code : 500,
           success: false,
@@ -251,7 +250,7 @@ export const resolvers: Resolvers = {
         };
 
       }catch(e){
-        console.log("erreur au like d'un tweet",e.message);
+        console.log("erreur au like d'un tweet",e);
           return {
             response:{
               code: 400,
@@ -292,7 +291,7 @@ export const resolvers: Resolvers = {
         };
 
       }catch(e){
-        console.log("erreur au commentaire d'un tweet",e.message);
+        console.log("erreur au commentaire d'un tweet",e);
           return {
             response:{
               code: 400,
