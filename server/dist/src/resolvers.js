@@ -62,6 +62,54 @@ export const resolvers = {
             }
         },
     },
+    User: {
+        tweets: async (parent, __, { dataSources }) => {
+            try {
+                const tweets = await dataSources.db.tweet.findMany({
+                    where: { userId: parent.id }
+                });
+                if (tweets.length === 0) {
+                    throw new Error(`Aucun tweet trouvé pour l'utilisateur avec l'ID ${parent.id}`);
+                }
+                return tweets;
+            }
+            catch (e) {
+                console.log("Erreur lors de la récupération des tweets de l'utilisateur", e.message);
+                throw new Error("Impossible de récupérer les tweets de l'utilisateur");
+            }
+        }
+    },
+    Tweet: {
+        likes: async (parent, __, { dataSources }) => {
+            try {
+                console.log(parent);
+                const likes = await dataSources.db.like.findMany({
+                    where: {
+                        tweetId: parent.id
+                    }
+                });
+                return likes;
+            }
+            catch (e) {
+                console.log("Erreur lors de la récupération des likes du tweet", e.message);
+                throw new Error("Impossible de récupérer les likes du tweet ");
+            }
+        },
+        comments: async (parent, __, { dataSources }) => {
+            try {
+                const comment = await dataSources.db.comment.findMany({
+                    where: {
+                        tweetId: parent.id
+                    }
+                });
+                return comment;
+            }
+            catch (e) {
+                console.log("Erreur lors de la récupération des commentaires du tweet", e.message);
+                throw new Error("Impossible de récupérer les commentaire du tweet ");
+            }
+        },
+    },
     Mutation: {
         createUser: async (_, { username, email, password, bio }, context) => {
             try {
@@ -135,6 +183,35 @@ export const resolvers = {
                 };
             }
         },
+        deleteTweet: async (_, { id }, context) => {
+            if (!context.user) {
+                throw new Error("Unauthorized: You must be logged in to create a tweet.");
+            }
+            try {
+                const tweet = await context.dataSources.db.tweet.findUnique({
+                    where: { id, userId: context.user.id }
+                });
+                if (!tweet) {
+                    throw new Error(`Le tweet avec l'ID ${id} n'existe pas.`);
+                }
+                await context.dataSources.db.tweet.delete({
+                    where: { id, userId: context.user.id }
+                });
+                return {
+                    code: 200,
+                    success: true,
+                    message: "Tweet supprimé avec succès",
+                };
+            }
+            catch (e) {
+                console.log("Erreur lors de la suppression du tweet", e.message);
+                return {
+                    code: 500,
+                    success: false,
+                    message: "Problem with delete tweet",
+                };
+            }
+        },
         likeTweet: async (_, { tweetId }, context) => {
             try {
                 if (!context.user) {
@@ -190,7 +267,8 @@ export const resolvers = {
                         message: `Comment has been created`,
                         success: true,
                     },
-                    like: {
+                    comment: {
+                        id: commentedTweet.id,
                         userId: commentedTweet.userId,
                         tweetId: commentedTweet.tweetId,
                         content: commentedTweet.content,
@@ -206,7 +284,7 @@ export const resolvers = {
                         message: `Problem with the comment of a tweet`,
                         success: false,
                     },
-                    like: null
+                    comment: null
                 };
             }
         }
