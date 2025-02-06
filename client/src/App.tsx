@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Header from './components/Header';
 import Profile from './pages/Profile';
 import Article from './pages/Article';
+import PostArticle from './pages/PostArticle';
 import Footer from './components/Footer';
 
 const App: React.FC = () => {
@@ -19,6 +20,7 @@ const App: React.FC = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/article/:id" element={<Article />} />
+          <Route path="/post-article" element={<PostArticle />} />
         </Routes>
       </div>
       <Footer/>

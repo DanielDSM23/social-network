@@ -10,24 +10,29 @@ const Header: React.FC = () => {
   };
 
   return (
-    <nav className="navbar">
-        <div>
-            <Link to="/" className="mr-4">Accueil</Link>
-            {isLoggedIn && <Link to="/profile" className="mr-4">Mon profil</Link>}
+    <header className="navbar">
+      <nav className="navbar-content">
+        <div className="navbar-left">
+          <Link to="/" className="navbar-link">Accueil</Link>
+          {/* {isLoggedIn && 
+          ( */}
+            <Link to="/post-article" className="navbar-link">Poster un article</Link>
+            <Link to="/profile" className="navbar-link">Profil</Link>
+          {/* )
+          } */}
         </div>
-        <div>
-            {!isLoggedIn ? (
+        <div className="navbar-right">
+          {!isLoggedIn ? (
             <>
-                <Link to="/login" className="btn btn-primary mr-4">Connexion</Link>
-                <Link to="/register" className="btn btn-primary">Inscription</Link>
+              <Link to="/login" className="btn btn-primary">Connexion</Link>
+              <Link to="/register" className="btn btn-primary">Inscription</Link>
             </>
-            ) : (
-            <button onClick={handleLogout} className="btn btn-danger">
-                Déconnexion
-            </button>
-            )}
+          ) : (
+            <button onClick={handleLogout} className="btn btn-danger">Déconnexion</button>
+          )}
         </div>
-    </nav>
+      </nav>
+    </header>
   );
 };
 
