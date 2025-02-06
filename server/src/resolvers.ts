@@ -65,6 +65,54 @@ export const resolvers: Resolvers = {
       },
     },
 
+    User:{
+      tweets:async (parent, __, { dataSources }) => {
+        try {
+          const tweets = await dataSources.db.tweet.findMany({
+            where: { userId: parent.id }
+          });
+
+          if (tweets.length === 0) {
+            throw new Error(`Aucun tweet trouvé pour l'utilisateur avec l'ID ${parent.id}`);
+          }
+          return tweets;
+        } catch (e) {
+          console.log("Erreur lors de la récupération des tweets de l'utilisateur", e.message);
+          throw new Error("Impossible de récupérer les tweets de l'utilisateur");
+        }
+      }
+    },
+
+    Tweet:{
+      likes:async(parent,__,{dataSources}) => {
+        try{
+          const likes = await dataSources.db.like.findMany({
+          where:{
+            tweetId: parent.id
+          }
+          });
+          return likes
+        }catch(e){
+          console.log("Erreur lors de la récupération des likes du tweet", e.message);
+          throw new Error("Impossible de récupérer les likes du tweet ");
+        }
+      },
+
+      comments:async(parent,__,{dataSources}) => {
+        try{
+          const likes = await dataSources.db.like.findMany({
+          where:{
+            tweetId: parent.id
+          }
+          });
+          return likes
+        }catch(e){
+          console.log("Erreur lors de la récupération des commentaires du tweet", e.message);
+          throw new Error("Impossible de récupérer les commentaire du tweet ");
+        }
+      },
+    },
+
    
 
   Mutation: {
