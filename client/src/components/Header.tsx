@@ -1,8 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { gql, useQuery } from '@apollo/client';
+
+const GET_USER_BY_ID = gql`
+  query GetUserById($id: ID!) {
+    getUserById(id: $id) {
+      id
+    }
+  }
+`;
 
 const Header: React.FC = () => {
   const isLoggedIn = !!localStorage.getItem('token'); 
+
+  const { data } = useQuery(GET_USER_BY_ID, {
+    skip: !isLoggedIn, 
+  });
 
   const handleLogout = () => {
     localStorage.removeItem('token'); 
@@ -17,7 +30,9 @@ const Header: React.FC = () => {
           {isLoggedIn && (
             <>
               <Link to="/post-article" className="navbar-link">Poster un article</Link>
-              <Link to="/profile" className="navbar-link">Profil</Link>
+              {data && data.getUserById && (
+                <Link to={`/profile/${data.getUserById.id}`} className="navbar-link">Profil</Link>
+              )}
             </>
           )}
         </div>
