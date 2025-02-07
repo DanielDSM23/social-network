@@ -12,6 +12,7 @@ export const signIn = async (_, { username, password }, { dataSources }) => {
             message: 'User is signed in',
             success: true,
             token,
+            userId: user.id,
         };
     }
     catch (e) {
@@ -20,7 +21,8 @@ export const signIn = async (_, { username, password }, { dataSources }) => {
             code: 401,
             message: 'User not auth',
             success: false,
-            token: null
+            token: null,
+            userId: null,
         };
     }
 };

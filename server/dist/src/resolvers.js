@@ -12,18 +12,26 @@ export const resolvers = {
                 throw new Error("Impossible de récupérer la liste des users");
             }
         },
-        getUserById: async (_, { id }, { dataSources }) => {
+        getUserById: async (_, __, { user, dataSources }) => {
             try {
-                const users = await dataSources.db.user.findUnique({
-                    where: { id: id }
-                });
-                return users;
+              if (!user || !user.id) {
+                throw new Error("Non authentifié. Token invalide ou manquant.");
+              }
+          
+              const userData = await dataSources.db.user.findUnique({
+                where: { id: user.id }, 
+              });
+          
+              if (!userData) {
+                throw new Error("Utilisateur non trouvé.");
+              }
+          
+              return userData;
+            } catch (e) {
+              console.log("Erreur lors de la récupération de l'utilisateur :", e);
+              throw new Error("Impossible de récupérer les informations de l'utilisateur.");
             }
-            catch (e) {
-                console.log("erreur à la récupérations du user", e);
-                throw new Error("Impossible de récupérer le user");
-            }
-        },
+          },
         getAllTweets: async (_, __, { dataSources }) => {
             try {
                 const tweets = await dataSources.db.tweet.findMany();

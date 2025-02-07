@@ -1,0 +1,163 @@
+/* styles.css */
+
+/* Styles globaux */
+body {
+  margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9fafb; /* Gris clair */
+    color: #333;
+  }
+  
+  header {
+    width: 100%;
+    background-color: #1a202c;
+    color: white;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    z-index: 10;
+  }
+
+  header nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+  }
+  
+  footer {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 80px auto 60px; /* Compense le header fixe */
+    padding: 1rem;
+    flex: 1;
+  }
+  
+  /* Buttons in header */
+  header a {
+    color: white;
+    margin-right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+  }
+  
+  header a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  /* Conteneur principal */
+  .container {
+    max-width: 1200px;
+    margin: 100px auto 60px; 
+    padding: 1rem;
+    flex: 1;
+  }
+  
+  /* Style des boutons */
+  .btn {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.2s;
+  }
+  
+  .btn-primary {
+    background-color: #2563eb; /* Bleu */
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.05);
+  }
+  
+  .btn-danger {
+    background-color: #dc2626; /* Rouge */
+    color: white;
+  }
+  
+  .btn-danger:hover {
+    background-color: #b91c1c;
+    transform: scale(1.05);
+  }
+  
+  /* Style des cartes (articles) */
+  .card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 16px;
+    transition: transform 0.2s;
+  }
+  
+  .card:hover {
+    transform: translateY(-3px);
+  }
+  
+  /* Style des inputs */
+  .input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border 0.3s;
+  }
+  
+  .input:focus {
+    border-color: #2563eb;
+    outline: none;
+  }
+  
+  /* Barre de navigation */
+  .navbar {
+    width: 100%;
+    background-color: #1a202c;
+    color: white;
+    position: fixed;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .navbar-left, .navbar-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar-link {
+    margin-right: 1rem;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  
