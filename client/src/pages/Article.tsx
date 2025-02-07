@@ -1,5 +1,5 @@
-import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+import React, { useState } from 'react';
+import { gql, useQuery, useMutation } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 
 const GET_TWEET_BY_ID = gql`
@@ -15,6 +15,42 @@ const GET_TWEET_BY_ID = gql`
       comments {
         id
         content
+        userId
+        createdAt
+      }
+    }
+  }
+`;
+
+const LIKE_TWEET = gql`
+  mutation LikeTweet($tweetId: ID!) {
+    likeTweet(tweetId: $tweetId) {
+      response {
+        code
+        message
+        success
+      }
+      like {
+        userId
+        tweetId
+      }
+    }
+  }
+`;
+
+const COMMENT_TWEET = gql`
+  mutation CommentTweet($tweetId: ID!, $content: String!) {
+    commentTweet(tweetId: $tweetId, content: $content) {
+      response {
+        code
+        message
+        success
+      }
+      comment {
+        id
+        content
+        userId
+        createdAt
       }
     }
   }
@@ -22,22 +58,58 @@ const GET_TWEET_BY_ID = gql`
 
 const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, loading, error } = useQuery(GET_TWEET_BY_ID, {
+  const { data, loading, error, refetch } = useQuery(GET_TWEET_BY_ID, {
     variables: { id },
   });
+
+  const [likeTweet] = useMutation(LIKE_TWEET);
+  const [commentTweet] = useMutation(COMMENT_TWEET);
+
+  const [newComment, setNewComment] = useState('');
 
   if (loading) return <p>Chargement...</p>;
   if (error) return <p>Erreur : {error.message}</p>;
 
   const tweet = data.getTweetByTweetId;
 
-  const handleLike = () => {
-    alert('Vous avez liké cet article.');
+  const handleLike = async () => {
+    try {
+      const response = await likeTweet({
+        variables: { tweetId: tweet.id },
+      });
+
+      if (response.data.likeTweet.response.success) {
+        alert('Vous avez liké ce tweet.');
+        refetch(); 
+      } else {
+        alert('Impossible de liker ce tweet.');
+      }
+    } catch (e) {
+      console.error('Erreur lors du like :', e.message);
+    }
   };
 
-  const handleAddComment = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddComment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert('Votre commentaire a été ajouté.');
+
+    try {
+      const response = await commentTweet({
+        variables: {
+          tweetId: tweet.id,
+          content: newComment,
+        },
+      });
+
+      if (response.data.commentTweet.response.success) {
+        alert('Votre commentaire a été ajouté.');
+        setNewComment('');
+        refetch(); 
+      } else {
+        alert('Impossible d\'ajouter le commentaire.');
+      }
+    } catch (e) {
+      console.error('Erreur lors de l\'ajout du commentaire :', e.message);
+    }
   };
 
   return (
@@ -55,8 +127,9 @@ const Article: React.FC = () => {
           <ul>
             {tweet.comments.map((comment: any) => (
               <li key={comment.id} className="border-b py-2">
+                <p className="font-bold">Utilisateur : {comment.userId}</p>
                 <p>{comment.content}</p>
-                {/* Supposons que l'utilisateur ne soit pas inclus dans le commentaire */}
+                <p className="text-gray-500 text-sm">{new Date(comment.createdAt).toLocaleString()}</p>
               </li>
             ))}
           </ul>
@@ -68,6 +141,8 @@ const Article: React.FC = () => {
         <textarea
           placeholder="Ajoutez un commentaire..."
           className="w-full border p-2 rounded"
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
           required
         />
         <button type="submit" className="mt-2 bg-green-500 text-white px-4 py-2 rounded">

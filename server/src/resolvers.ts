@@ -16,14 +16,10 @@ export const resolvers: Resolvers = {
         }
       },
 
-      getUserById: async (_, __, { user, dataSources }) => {
-        try {
-          if (!user || !user.id) {
-            throw new Error("Non authentifié. Token invalide ou manquant.");
-          }
-      
+      getUserById: async (_, {id}, {dataSources }) => {
+        try {      
           const userData = await dataSources.db.user.findUnique({
-            where: { id: user.id }, 
+            where: { id: id }, 
           });
       
           if (!userData) {
@@ -52,9 +48,6 @@ export const resolvers: Resolvers = {
           const tweets = await dataSources.db.tweet.findMany({
             where:{userId:id}
           })
-          if (tweets.length === 0) {
-            throw new Error(`Aucun tweet trouvé pour l'utilisateur avec l'ID ${id}`);
-          }
           return tweets;
         } catch(e){
           console.log("erreur à la récupérations du tweet par le ID user",e.message);
@@ -81,12 +74,9 @@ export const resolvers: Resolvers = {
           const tweets = await dataSources.db.tweet.findMany({
             where: { userId: parent.id }
           });
-
-          if (tweets.length === 0) {
-            throw new Error(`Aucun tweet trouvé pour l'utilisateur avec l'ID ${parent.id}`);
-          }
           return tweets;
         } catch (e) {
+          console.log('catch',parent)
           console.log("Erreur lors de la récupération des tweets de l'utilisateur", e.message);
           throw new Error("Impossible de récupérer les tweets de l'utilisateur");
         }
