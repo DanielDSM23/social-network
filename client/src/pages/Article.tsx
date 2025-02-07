@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const GET_TWEET_BY_ID = gql`
   query GetTweetById($id: ID!) {
@@ -56,16 +56,29 @@ const COMMENT_TWEET = gql`
   }
 `;
 
+const DELETE_TWEET = gql`
+  mutation DeleteTweet($id: String!) {
+    deleteTweet(id: $id) {
+      code
+      message
+      success
+    }
+  }
+`;
+
 const Article: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { data, loading, error, refetch } = useQuery(GET_TWEET_BY_ID, {
     variables: { id },
   });
 
   const [likeTweet] = useMutation(LIKE_TWEET);
   const [commentTweet] = useMutation(COMMENT_TWEET);
+  const [deleteTweet] = useMutation(DELETE_TWEET);
 
   const [newComment, setNewComment] = useState('');
+  const loggedInUserId = localStorage.getItem('userId'); 
 
   if (loading) return <p>Chargement...</p>;
   if (error) return <p>Erreur : {error.message}</p>;
@@ -85,7 +98,7 @@ const Article: React.FC = () => {
         alert('Impossible de liker ce tweet.');
       }
     } catch (e) {
-      console.error('Erreur lors du like :', e.message);
+      console.error('Erreur lors du like :', e);
     }
   };
 
@@ -108,7 +121,25 @@ const Article: React.FC = () => {
         alert('Impossible d\'ajouter le commentaire.');
       }
     } catch (e) {
-      console.error('Erreur lors de l\'ajout du commentaire :', e.message);
+      console.error('Erreur lors de l\'ajout du commentaire :', e);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteTweet({
+        variables: { id: tweet.id },
+      });
+      console.log(response.data)
+
+      if (response.data.deleteTweet.success) {
+        alert('Le tweet a été supprimé avec succès.');
+        navigate('/'); 
+      } else {
+        alert('Impossible de supprimer ce tweet.');
+      }
+    } catch (e) {
+      console.error('Erreur lors de la suppression du tweet :', e);
     }
   };
 
@@ -120,6 +151,14 @@ const Article: React.FC = () => {
         <button onClick={handleLike} className="bg-blue-500 text-white px-4 py-2 rounded">
           Like ({tweet.likes ? tweet.likes.length : 0})
         </button>
+        {/* {loggedInUserId === tweet.userId && ( */}
+          <button
+            onClick={handleDelete}
+            className="bg-red-500 text-white px-4 py-2 rounded ml-4"
+          >
+            Supprimer
+          </button>
+        {/* )} */}
       </div>
       <div>
         <h2 className="text-xl font-bold">Commentaires</h2>
@@ -129,7 +168,17 @@ const Article: React.FC = () => {
               <li key={comment.id} className="border-b py-2">
                 <p className="font-bold">Utilisateur : {comment.userId}</p>
                 <p>{comment.content}</p>
-                <p className="text-gray-500 text-sm">{new Date(comment.createdAt).toLocaleString()}</p>
+                <p className="text-gray-500 text-sm">
+                {new Date(Number(comment.createdAt)).toLocaleString('fr-FR', {
+                                
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                })}
+              </p>
               </li>
             ))}
           </ul>

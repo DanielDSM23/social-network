@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client';
 
-const GET_USER_BY_ID = gql`
+const GET_USER_BY_ID_HEADER = gql`
   query GetUserById($id: ID!) {
     getUserById(id: $id) {
       id
@@ -13,7 +13,7 @@ const GET_USER_BY_ID = gql`
 const Header: React.FC = () => {
   const isLoggedIn = !!localStorage.getItem('token'); 
 
-  const { data } = useQuery(GET_USER_BY_ID, {
+  const { data } = useQuery(GET_USER_BY_ID_HEADER, {
     skip: !isLoggedIn, 
   });
 

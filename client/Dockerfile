@@ -1,7 +1,7 @@
 FROM node:23-alpine3.20 AS builder
 
 WORKDIR /app
-
+ENV REACT_APP_API = "http://api:4000/";
 COPY package*.json .
 
 RUN npm install
