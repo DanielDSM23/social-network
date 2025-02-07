@@ -1,0 +1,12 @@
+services:
+  api:
+    build: ./server
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./server/prisma/dev.db:/app/prisma/dev.db
+  react:
+    build: ./client
+    ports:
+      - "80:80"
+    

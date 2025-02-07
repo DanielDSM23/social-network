@@ -17,6 +17,7 @@ export const signIn: MutationResolvers['signIn'] = async (_, {username, password
         message: 'User is signed in',
         success: true,
         token,
+        userId: user.id,
       }
     } catch(e) {
       console.log("Sign-in error", e)
@@ -24,7 +25,8 @@ export const signIn: MutationResolvers['signIn'] = async (_, {username, password
         code: 401,
         message: 'User not auth',
         success: false,
-        token: null
+        token: null,
+        userId: null
       }
     }
   }
