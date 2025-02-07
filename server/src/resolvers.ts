@@ -16,15 +16,24 @@ export const resolvers: Resolvers = {
         }
       },
 
-      getUserById: async (_,{id},{dataSources}) => {
-        try{
-          const users = await dataSources.db.user.findUnique({
-            where:{id:id}
-          })
-          return users
-        } catch(e){
-          console.log("erreur à la récupérations du user",e);
-          throw new Error("Impossible de récupérer le user");
+      getUserById: async (_, __, { user, dataSources }) => {
+        try {
+          if (!user || !user.id) {
+            throw new Error("Non authentifié. Token invalide ou manquant.");
+          }
+      
+          const userData = await dataSources.db.user.findUnique({
+            where: { id: user.id }, 
+          });
+      
+          if (!userData) {
+            throw new Error("Utilisateur non trouvé.");
+          }
+      
+          return userData;
+        } catch (e) {
+          console.log("Erreur lors de la récupération de l'utilisateur :", e);
+          throw new Error("Impossible de récupérer les informations de l'utilisateur.");
         }
       },
 
@@ -193,6 +202,37 @@ export const resolvers: Resolvers = {
         }
     },
 
+    deleteTweet: async (_,{id},context) => {
+      if(!context.user){
+        throw new Error("Unauthorized: You must be logged in to create a tweet.");
+      }
+      try {
+        const tweet = await context.dataSources.db.tweet.findUnique({
+          where: { id, userId: context.user.id}
+        });
+  
+        if (!tweet) {
+          throw new Error(`Le tweet avec l'ID ${id} n'existe pas.`);
+        }
+        await context.dataSources.db.tweet.delete({
+          where: { id , userId: context.user.id}
+        });
+  
+        return {
+          code : 200,
+          success: true,
+          message: "Tweet supprimé avec succès",
+        };
+      } 
+      catch (e) {
+        console.log("Erreur lors de la suppression du tweet", e.message);
+        return {
+          code : 500,
+          success: false,
+          message: "Problem with delete tweet",
+        };
+      }
+    },
 
     likeTweet: async(_,{tweetId},context) => {
       try{

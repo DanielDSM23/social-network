@@ -1,37 +1,62 @@
 import React, { useState } from 'react';
+import { gql, useMutation } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
+
+const LOGIN_MUTATION = gql`
+  mutation Login($username: String!, $password: String!) {
+    signIn(username: $username, password: $password) {
+      code
+      success
+      message
+      token
+    }
+  }
+`;
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [login, { loading, error }] = useMutation(LOGIN_MUTATION);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Email : ${email}, Password : ${password}`);
+    try {
+      const result = await login({
+        variables: formData,
+      });
+      const token = result.data.signIn.token; 
+      if (token) {
+        localStorage.setItem('token', token); 
+        navigate('/'); 
+        window.location.reload(); 
+      }
+    } catch (err) {
+      console.error('Erreur lors de la connexion :', err);
+    }
   };
 
   return (
-    <div className="p-4">
+    <div className="container">
       <h1 className="text-2xl font-bold mb-4">Connexion</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit}>
         <input
-          type="email"
-          placeholder="Email"
-          className="input"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Nom d'utilisateur"
+          value={formData.username}
+          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
           required
         />
         <input
           type="password"
           placeholder="Mot de passe"
-          className="input"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={formData.password}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           required
         />
-        <button type="submit" className="btn btn-primary">
-          Se connecter
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'Connexion en cours...' : 'Se connecter'}
         </button>
+        {error && <p className="text-red-500">Erreur : {error.message}</p>}
       </form>
     </div>
   );
