@@ -116,6 +116,9 @@ export const resolvers: Resolvers = {
 
   Mutation: {
     createUser: async (_, { username, email, password, bio }, context) => {
+      if(!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)){
+        throw new Error("Invalid email!");
+      }
       try {
         const createdUser = await context.dataSources.db.user.create({
           data: {
