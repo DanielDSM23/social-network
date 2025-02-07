@@ -5,6 +5,15 @@ const config: CodegenConfig = {
   generates: {
     './src/types.ts': {
       plugins: ["typescript", "typescript-resolvers"],
+      config: {
+        contextType: './context#DataSourceContext',
+        mappers: {
+          User: './models#UserModel',
+          Tweet: './models#TweetModel',
+          Like: './models#LikeModel',
+          Comment: './models#CommentModel'
+        }
+      }
     }
   }
 }
