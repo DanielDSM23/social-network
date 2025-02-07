@@ -43,9 +43,6 @@ export const resolvers: Resolvers = {
           const tweets = await dataSources.db.tweet.findMany({
             where:{userId:id}
           })
-          if (tweets.length === 0) {
-            throw new Error(`Aucun tweet trouvé pour l'utilisateur avec l'ID ${id}`);
-          }
           return tweets;
         } catch(e){
           console.log("erreur à la récupérations du tweet par le ID user",e);
@@ -60,7 +57,7 @@ export const resolvers: Resolvers = {
           })
           return tweet;
         } catch(e){
-          //console.log("erreur à la récupérations du tweet par le ID tweet",e);
+          console.log("erreur à la récupérations du tweet par le ID tweet",e);
           throw new Error("Impossible de récupérer le tweet par le ID tweet");
         }
       },
@@ -72,10 +69,6 @@ export const resolvers: Resolvers = {
           const tweets = await dataSources.db.tweet.findMany({
             where: { userId: parent.id }
           });
-
-          if (tweets.length === 0) {
-            throw new Error(`Aucun tweet trouvé pour l'utilisateur avec l'ID ${parent.id}`);
-          }
           return tweets;
         } catch (e) {
           console.log("Erreur lors de la récupération des tweets de l'utilisateur", e);
@@ -87,7 +80,6 @@ export const resolvers: Resolvers = {
     Tweet:{
       likes:async(parent,__,{dataSources}) => {
         try{
-          console.log(parent);
           const likes = await dataSources.db.like.findMany({
           where:{
             tweetId: parent.id
@@ -120,7 +112,6 @@ export const resolvers: Resolvers = {
   Mutation: {
     createUser: async (_, { username, email, password, bio }, context) => {
       try {
-        
         const createdUser = await context.dataSources.db.user.create({
           data: {
             username,
