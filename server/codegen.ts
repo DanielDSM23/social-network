@@ -11,7 +11,7 @@ const config: CodegenConfig = {
           User: './models#UserModel',
           Tweet: './models#TweetModel',
           Like: './models#LikeModel',
-          Comment: './models#CommentModel'
+          Comment: './models#CommentModel
         }
       }
     }
