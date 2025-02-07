@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
-import client from './apollo/client'; // Assurez-vous que ce chemin est correct
+import client from './apollo/client'; 
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -14,6 +14,7 @@ import Footer from './components/Footer';
 
 const App: React.FC = () => {
   return (
+  <StrictMode>
     <ApolloProvider client={client}>
       <Router>
         <Header />
@@ -30,6 +31,7 @@ const App: React.FC = () => {
         <Footer />
       </Router>
     </ApolloProvider>
+    </StrictMode>
   );
 };
 
